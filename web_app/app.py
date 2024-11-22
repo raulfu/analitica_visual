@@ -4,8 +4,8 @@ import pandas as pd
 st.set_page_config(layout="wide")
 from utils.helpers import df_header
 
-#cd Desktop\analitica_visual\final_project\analitica_visual_project\web_app
-#streamlit run my_app.py
+#cd Desktop\analitica_visual\final_project\analitica_visual\web_app
+#streamlit run app.py
 
 
 

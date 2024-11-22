@@ -1,4 +1,4 @@
-from utils.helpers import df_header
+from utils.helpers import df_header, df_box_score
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 st.title("Game Analysis")
 
 # Selectboxes to choose teams and season
-teams = df_header['team_a'].unique()
-team_a = st.selectbox("Select Local Team", options=teams, index = 67)
-team_b = st.selectbox("Select Away Team", options=teams, index = 90)
-#st.write(df_header['team_a'].nunique())
+teams = df_header['team_id_a'].unique()
+team_id_a = st.selectbox("Select Local Team", options=teams, index = 18)
+team_id_b = st.selectbox("Select Away Team", options=teams, index = 20)
+#st.write(df_header['team_id_a'].nunique())
 
 # Filter dataframe to show only games between selected teams
-filtered_df = df_header[((df_header['team_a'] == team_a) & (df_header['team_b'] == team_b))]
+filtered_df = df_header[((df_header['team_id_a'] == team_id_a) & (df_header['team_id_b'] == team_id_b))]
 
 # Get unique seasons for the selected teams
 seasons = filtered_df['season_code'].unique()
@@ -34,25 +34,43 @@ else:
 
     # Extract the selected game's data
     selected_game = season_df[season_df['game_id'] == game_id].iloc[0]
+    team_a = selected_game['team_a']
+    team_b = selected_game['team_b']
 
     # Display game details
-    st.write(f"#### {team_a} {selected_game['score_a']} vs {team_b} {selected_game['score_b']} ({selected_game['phase']} GAME ON {season} SEASON ON {selected_game['date']})")
+    st.write(f"#### {team_a} {selected_game['score_a']} vs {selected_game['score_b']} {team_b} ({selected_game['phase']} GAME ON {season} SEASON ON {selected_game['date']})")
+
 
     # Extract cumulative scores for the selected game
     quarters = ['score_quarter_1', 'score_quarter_2', 'score_quarter_3', 'score_quarter_4']
     cumulative_team_a = [selected_game[f"{q}_a"] for q in quarters]
     cumulative_team_b = [selected_game[f"{q}_b"] for q in quarters]
 
-    # Compute points scored per quarter
-    points_team_a = [cumulative_team_a[0]] + [cumulative_team_a[i] - cumulative_team_a[i-1] for i in range(1, len(cumulative_team_a))]
-    points_team_b = [cumulative_team_b[0]] + [cumulative_team_b[i] - cumulative_team_b[i-1] for i in range(1, len(cumulative_team_b))]
+    # Check for extra time and include them if they exist
+    extra_time_labels = []
+    extra_time_scores_team_a = []
+    extra_time_scores_team_b = []
 
-    # Define quarter labels
-    labels = ['Q1', 'Q2', 'Q3', 'Q4']
+    for i in range(1, 5):  # Extra time quarters 1 through 4
+        extra_time_label = f"score_extra_time_{i}"
+        if not pd.isna(selected_game[f"{extra_time_label}_a"]):  # Check if the extra time score exists
+            extra_time_labels.append(f"EQ{i}")
+            extra_time_scores_team_a.append(selected_game[f"{extra_time_label}_a"])
+            extra_time_scores_team_b.append(selected_game[f"{extra_time_label}_b"])
 
+    # Add the extra time scores to the cumulative scores
+    cumulative_team_a += extra_time_scores_team_a
+    cumulative_team_b += extra_time_scores_team_b
 
+    # Compute points scored per quarter, including extra time
+    points_team_a = [cumulative_team_a[0]] + [cumulative_team_a[i] - cumulative_team_a[i - 1] for i in range(1, len(cumulative_team_a))]
+    points_team_b = [cumulative_team_b[0]] + [cumulative_team_b[i] - cumulative_team_b[i - 1] for i in range(1, len(cumulative_team_b))]
 
+    # Define labels, including extra time labels
+    labels = ['Q1', 'Q2', 'Q3', 'Q4'] + extra_time_labels
 
+    
+    
     # Matplotlib visualizations
     st.write("##### Matplotlib Visualizations")
 
@@ -102,50 +120,34 @@ else:
 
 
 
-    # Streamlit application for Altair Charts
-    st.write("##### Streamlit Altair Visualizations")
+    #box scores
+    game_box_score = df_box_score[df_box_score['game_id'] == game_id]
+    game_box_score = game_box_score.drop(columns = ['season_code', 'game_player_id', 'game_id', 'game', 'round', 'phase', 'player_id'])
 
-    # Points scored per quarter - Prepare data for Streamlit bar chart
-    points_data = pd.DataFrame({
-        "Quarter": labels * 2,
-        "Team": [team_a] * 4 + [team_b] * 4,
-        "Points": points_team_a + points_team_b
-    })
+    team_a_box_score = game_box_score[game_box_score['team_id'] == team_id_a]
+    team_b_box_score = game_box_score[game_box_score['team_id'] == team_id_b]
 
-    # Altair chart for points scored per quarter
-    points_chart = alt.Chart(points_data).mark_bar().encode(
-        x=alt.X('Quarter:N', title='Quarter'),
-        y=alt.Y('Points:Q', title='Points Scored'),
-        color=alt.Color('Team:N', scale=alt.Scale(domain=[team_a, team_b], range=['red', 'blue'])),
-        tooltip=['Team', 'Points']
-    ).properties(
-        title="Points Scored Per Quarter",
-        width=600,
-        height=400
-    )
+    team_a_box_score_totals = team_a_box_score[team_a_box_score['dorsal'] == 'TOTAL'].drop(columns = ['is_starter', 'is_playing', 'plus_minus', 'dorsal'])
+    team_b_box_score_totals = team_b_box_score[team_b_box_score['dorsal'] == 'TOTAL'].drop(columns = ['is_starter', 'is_playing', 'plus_minus', 'dorsal'])
 
-    # Cumulative scores per quarter - Prepare data for Streamlit bar chart
-    cumulative_data = pd.DataFrame({
-        "Quarter": labels * 2,
-        "Team": [team_a] * 4 + [team_b] * 4,
-        "Cumulative Points": cumulative_team_a + cumulative_team_b
-    })
+    
 
-    # Altair chart for cumulative scores per quarter
-    cumulative_chart = alt.Chart(cumulative_data).mark_bar().encode(
-        x=alt.X('Quarter:N', title='Quarter'),
-        y=alt.Y('Cumulative Points:Q', title='Cumulative Points'),
-        color=alt.Color('Team:N', scale=alt.Scale(domain=[team_a, team_b], range=['red', 'blue'])),
-        tooltip=['Team', 'Cumulative Points']
-    ).properties(
-        title="Cumulative Scores Per Quarter",
-        width=600,
-        height=400
-    )
+    
+    
+    
+    st.write(f"{team_a} BOX SCORE")
+    st.write(team_a_box_score[team_a_box_score['dorsal'] != 'TOTAL'])
 
-    # Display Altair charts in two columns
-    col1, col2 = st.columns(2)
-    with col1:
-        st.altair_chart(points_chart)
-    with col2:
-        st.altair_chart(cumulative_chart)
+
+    st.write(f"{team_a} TOTALS")
+    st.write(team_a_box_score_totals)
+
+
+    st.write(f"{team_b} BOX SCORE")
+    st.write(team_b_box_score[team_b_box_score['dorsal'] != 'TOTAL'])
+
+
+    st.write(f"{team_b} TOTALS")
+    st.write(team_b_box_score_totals)
+        
+
