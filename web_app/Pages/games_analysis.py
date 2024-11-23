@@ -8,13 +8,14 @@ import matplotlib.pyplot as plt
 st.title("Game Analysis")
 
 # Selectboxes to choose teams and season
-teams = df_header['team_id_a'].unique()
+teams = df_header['team_a_'].unique()
+
 team_id_a = st.selectbox("Select Local Team", options=teams, index = 18)
 team_id_b = st.selectbox("Select Away Team", options=teams, index = 20)
 #st.write(df_header['team_id_a'].nunique())
 
 # Filter dataframe to show only games between selected teams
-filtered_df = df_header[((df_header['team_id_a'] == team_id_a) & (df_header['team_id_b'] == team_id_b))]
+filtered_df = df_header[((df_header['team_a_'] == team_id_a) & (df_header['team_b_'] == team_id_b))]
 
 # Get unique seasons for the selected teams
 seasons = filtered_df['season_code'].unique()
@@ -124,8 +125,11 @@ else:
     game_box_score = df_box_score[df_box_score['game_id'] == game_id]
     game_box_score = game_box_score.drop(columns = ['season_code', 'game_player_id', 'game_id', 'game', 'round', 'phase', 'player_id'])
 
-    team_a_box_score = game_box_score[game_box_score['team_id'] == team_id_a]
-    team_b_box_score = game_box_score[game_box_score['team_id'] == team_id_b]
+    team_id_a_ = selected_game['team_id_a']
+    team_id_b_ = selected_game['team_id_b']
+
+    team_a_box_score = game_box_score[game_box_score['team_id'] == team_id_a_]
+    team_b_box_score = game_box_score[game_box_score['team_id'] == team_id_b_]
 
     team_a_box_score_totals = team_a_box_score[team_a_box_score['dorsal'] == 'TOTAL'].drop(columns = ['is_starter', 'is_playing', 'plus_minus', 'dorsal'])
     team_b_box_score_totals = team_b_box_score[team_b_box_score['dorsal'] == 'TOTAL'].drop(columns = ['is_starter', 'is_playing', 'plus_minus', 'dorsal'])

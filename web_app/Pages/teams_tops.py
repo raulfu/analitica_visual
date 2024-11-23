@@ -1,15 +1,15 @@
-from utils.helpers import df_players, create_plot
+from utils.helpers import df_teams, create_plot
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
 
 # Group data for totals and averages
-df_players_total = df_players.groupby('player')[['points', 'three_points_made', 'total_rebounds', 'assists', 'steals', 'blocks_favour', 'valuation', 'plus_minus']].sum()
+df_players_total = df_teams.groupby('team_name')[['points', 'three_points_made', 'total_rebounds', 'assists', 'steals', 'blocks_favour', 'valuation']].sum()
 
 #excluding 2024
-df_players_until_2024 = df_players[df_players['season_code'] != 'E2024']
+df_players_until_2024 = df_teams[df_teams['season_code'] != 'E2024']
 
-df_players_avg = df_players_until_2024.groupby('player')[['points_per_game', 'three_points_made_per_game', 'total_rebounds_per_game', 'assists_per_game', 'steals_per_game', 'blocks_favour_per_game', 'valuation_per_game', 'plus_minus_per_game']].mean()
+df_players_avg = df_players_until_2024.groupby('team_name')[['points_per_game', 'three_points_made_per_game', 'total_rebounds_per_game', 'assists_per_game', 'steals_per_game', 'blocks_favour_per_game', 'valuation_per_game']].mean()
 
 # Create a mapping for the categories
 categories = {
@@ -20,11 +20,10 @@ categories = {
     "Steals": ("steals", "steals_per_game"),
     "Blocks": ("blocks_favour", "blocks_favour_per_game"),
     "Valuation": ("valuation", "valuation_per_game"),
-    "Plus/Minus": ("plus_minus", "plus_minus_per_game"),
 }
 
 # Streamlit App
-st.title("Top 10 Players in Various Categories")
+st.title("Top 10 Teams in Various Categories")
 st.sidebar.header("Select Category")
 
 # Select category
@@ -43,14 +42,14 @@ col1, col2 = st.columns(2)
 # Plot Total Chart
 with col1:
     st.subheader(f"Top 10 Players by {selected_category} (Totals)")
-    fig1 = create_plot(top_10_totals, f"Top 10 Players by {selected_category} (Totals)", "Player", "Total", color = 'plum')
+    fig1 = create_plot(top_10_totals, f"Top 10 Teams by {selected_category} (Totals)", "Player", "Total", color = 'plum')
     st.pyplot(fig1)
     st.write(top_10_totals)
 
 # Plot Per-Game Chart
 with col2:
     st.subheader(f"Top 10 Players by {selected_category} (Per Game)")
-    fig2 = create_plot(top_10_per_game, f"Top 10 Players by {selected_category} (Per Game)", "Player", "Per Game", color = 'mediumpurple')
+    fig2 = create_plot(top_10_per_game, f"Top 10 Teams by {selected_category} (Per Game)", "Player", "Per Game", color = 'mediumpurple')
     st.pyplot(fig2)
     st.write(top_10_per_game)
 
