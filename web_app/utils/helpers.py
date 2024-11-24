@@ -93,7 +93,7 @@ team_id_to_name = {
     'PAN': 'PANATHINAIKOS',
     'PAR': 'PARTIZAN',
     'MIL': 'MILAN',
-    'IST': 'FENERBAHCE',
+    'IST': 'ANADOLU EFES',
     'TEL': 'MACCABI TEL AVIV',
     'EFES': 'EFES',
     'BAS': 'BASKONIA',
@@ -120,8 +120,34 @@ team_id_to_name = {
     'STR': 'STRASBOURG',
     'LMG': 'LIMOGES',
     'CHO': 'CHOLET',
+    'CHL': 'CHALON',
     'CHA': 'CHALON',
-    'PRS': 'PARIS BASKETBALL'
+    'PRS': 'PARIS BASKETBALL',
+    'ROA': 'CHORALE ROANNE',
+    'ULK': 'FENERBAHCE',
+    'JOV': 'JOVENTUT DE BADALONA',
+    'PAM': 'VALENCIA BASKET',
+    'SIE': 'SIENA',
+    'ZAG': 'ZAGREB',
+    'TIV': 'KRASNODAR',
+    'NOV': 'NOVGOROD',
+    'NAN': 'NANCY',
+    'UNK': 'UNICS KAZAN',
+    'MAR': 'MAROUSSI',
+    'BES': 'BESIKTAS',
+    'SAS': 'SASSARI',
+    'NIK': 'BUDIVELNIK',
+    'ZGO': 'ZGORZELEC',
+    'ARI': 'ARIS',
+    'ORL': 'ORLEANS',
+    'KSK': 'PINAR KARSIYAKA IZMIR',
+    'LEM': 'LE MANS',
+    'NIO': 'PANIONIOS',
+    'AVE': 'AIR AVELLINO',
+    'CAN': 'GRAN CANARIA',
+    'DYR': 'ZENIT ST PETERSBURGO',
+    'GSS': 'STELMET ZIELONA GORA',
+    'KLA': 'KLAIPEDA'
 }
 
 # Function to map team_id to team_name
@@ -158,3 +184,6 @@ def create_plot(data, title, xlabel, ylabel,color):
     
     return fig
 
+
+#tiene puntos infinitos por alguna razon
+df_players = df_players[df_players['player'] != 'STELMAHERS, ROBERTS']  
