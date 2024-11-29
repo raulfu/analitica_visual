@@ -78,7 +78,7 @@ def normalize_team_name(team_name):
 df_header['team_a_'] = df_header['team_a'].apply(normalize_team_name)
 df_header['team_b_'] = df_header['team_b'].apply(normalize_team_name)
 
-
+    
 
 # Assume df_teams is your DataFrame and team_mappings has already been defined.
 
