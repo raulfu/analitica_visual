@@ -187,3 +187,96 @@ def create_plot(data, title, xlabel, ylabel,color):
 
 #tiene puntos infinitos por alguna razon
 df_players = df_players[df_players['player'] != 'STELMAHERS, ROBERTS']  
+
+
+
+# Function to simulate a season for a selected team
+def simulate_season(team_id, df_teams, model):
+    # Filter teams for the current season
+    teams_current_season = df_teams[df_teams['season_code'] == 'E2024']
+    teams = teams_current_season['team_id'].unique()
+    
+    # Ensure the selected team is valid
+    if team_id not in teams:
+        raise ValueError(f"Team ID {team_id} not found in the current season!")
+    
+    # Initialize record
+    wins = 0
+    losses = 0
+    results = []  # Store detailed game results
+
+    # Get stats for the selected team
+    team_stats = df_teams[df_teams['team_id'] == team_id].iloc[0]
+
+    # Simulate games against all other teams
+    for opponent_id in teams:
+        if opponent_id == team_id:
+            continue  # Skip games against itself
+        
+        # Get stats for the opponent team
+        opponent_stats = df_teams[df_teams['team_id'] == opponent_id].iloc[0]
+
+        # Simulate game 1: selected team as local (team_a), opponent as away (team_b)
+        input_data_local = pd.DataFrame([{
+            'defensive_rebounds_a': team_stats['defensive_rebounds_per_game'],
+            'offensive_rebounds_a': team_stats['offensive_rebounds_per_game'],
+            'assists_a': team_stats['assists_per_game'],
+            'three_points_made_a': team_stats['three_points_made_per_game'],
+            'turnovers_a': team_stats['turnovers_per_game'],
+            'blocks_favour_a': team_stats.get('blocks_favour_per_game', 0),
+            'steals_a': team_stats.get('steals_per_game', 0),
+            'defensive_rebounds_b': opponent_stats['defensive_rebounds_per_game'],
+            'offensive_rebounds_b': opponent_stats['offensive_rebounds_per_game'],
+            'assists_b': opponent_stats['assists_per_game'],
+            'three_points_made_b': opponent_stats['three_points_made_per_game'],
+            'turnovers_b': opponent_stats['turnovers_per_game'],
+            'blocks_favour_b': opponent_stats.get('blocks_favour_per_game', 0),
+            'steals_b': opponent_stats.get('steals_per_game', 0),
+        }])
+
+        # Predict scores
+        predicted_scores_local = model.predict(input_data_local)
+        points_a_local = predicted_scores_local[0][0]
+        points_b_local = predicted_scores_local[0][1]
+
+        # Determine the result
+        if points_a_local > points_b_local:
+            wins += 1
+            results.append({'team_a': team_id, 'team_b': opponent_id, 'points_a': points_a_local, 'points_b': points_b_local, 'winner': team_id})
+        else:
+            losses += 1
+            results.append({'team_a': team_id, 'team_b': opponent_id, 'points_a': points_a_local, 'points_b': points_b_local, 'winner': opponent_id})
+
+        # Simulate game 2: selected team as away (team_b), opponent as local (team_a)
+        input_data_away = pd.DataFrame([{
+            'defensive_rebounds_a': opponent_stats['defensive_rebounds_per_game'],
+            'offensive_rebounds_a': opponent_stats['offensive_rebounds_per_game'],
+            'assists_a': opponent_stats['assists_per_game'],
+            'three_points_made_a': opponent_stats['three_points_made_per_game'],
+            'turnovers_a': opponent_stats['turnovers_per_game'],
+            'blocks_favour_a': opponent_stats.get('blocks_favour_per_game', 0),
+            'steals_a': opponent_stats.get('steals_per_game', 0),
+            'defensive_rebounds_b': team_stats['defensive_rebounds_per_game'],
+            'offensive_rebounds_b': team_stats['offensive_rebounds_per_game'],
+            'assists_b': team_stats['assists_per_game'],
+            'three_points_made_b': team_stats['three_points_made_per_game'],
+            'turnovers_b': team_stats['turnovers_per_game'],
+            'blocks_favour_b': team_stats.get('blocks_favour_per_game', 0),
+            'steals_b': team_stats.get('steals_per_game', 0),
+        }])
+
+        # Predict scores
+        predicted_scores_away = model.predict(input_data_away)
+        points_a_away = predicted_scores_away[0][0]
+        points_b_away = predicted_scores_away[0][1]
+
+        # Determine the result
+        if points_b_away > points_a_away:
+            wins += 1
+            results.append({'team_a': opponent_id, 'team_b': team_id, 'points_a': points_a_away, 'points_b': points_b_away, 'winner': team_id})
+        else:
+            losses += 1
+            results.append({'team_a': opponent_id, 'team_b': team_id, 'points_a': points_a_away, 'points_b': points_b_away, 'winner': opponent_id})
+
+    # Return the season record and detailed results
+    return {'team_id': team_id, 'wins': wins, 'losses': losses, 'results': results}
