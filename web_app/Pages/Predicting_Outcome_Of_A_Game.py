@@ -2,24 +2,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 from utils.helpers import df_teams
-
-#st.set_page_config(layout="wide")
-
-# Load the models
-with open('../logistic_model.pkl', 'rb') as f:
-    logistic_model = pickle.load(f)
-
-with open('../rf_model.pkl', 'rb') as f:
-    rf_model = pickle.load(f)
-
-with open('../linear_regressor_points.pkl', 'rb') as f:
-    linear_regressor = pickle.load(f)
-
-with open('../gradient_boosting_points.pkl', 'rb') as f:
-    gb_regressor = pickle.load(f)
-
-with open('../svr_regressor_points.pkl', 'rb') as f:
-    svr_regressor = pickle.load(f)
+from utils.helpers_models import linear_regressor, logistic_model, svr_regressor, rf_model, gb_regressor
 
 
 
