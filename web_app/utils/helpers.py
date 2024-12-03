@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-@st.cache_data
+#@st.cache_data
 # datasets
 df_players = pd.read_csv('../datasets/euroleague_players.csv')
 df_box_score = pd.read_csv('../datasets/euroleague_box_score.csv')

@@ -4,7 +4,7 @@ from utils.helpers import df_box_score, df_teams, df_box_score_eurocup
 from sklearn.model_selection import train_test_split
 
 #models
-@st.cache_data
+#@st.cache_data
 # Load the models
 with open('../logistic_model.pkl', 'rb') as f:
     logistic_model = pickle.load(f)
