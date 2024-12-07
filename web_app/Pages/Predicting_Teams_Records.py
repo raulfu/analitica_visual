@@ -1,12 +1,11 @@
 import streamlit as st
 from utils.helpers import simulate_season, df_teams, team_id_to_name
 from utils.helpers_models import linear_regressor
-
-
+import pandas as pd
+import plotly.express as px
 
 
 def Predicting_Teams_Records_main():
-
 
     st.title("Euroleague Team Record Predictor / Season Simulator")
     st.write("""This app predicts the record of a Euroleague basketball team of the current season.
@@ -48,5 +47,16 @@ def Predicting_Teams_Records_main():
                 st.write(f"{team_a_name} ({game['points_a']:.1f}) vs {team_b_name} ({game['points_b']:.1f}) - Winner: {winner_name}")
 
 
-if __name__ == "__main__":
-    main()
+    # Prepare data for visualization
+    results_df = pd.DataFrame(season_results['results'])
+    results_df['team_a_name'] = results_df['team_a'].map(team_id_to_name)
+    results_df['team_b_name'] = results_df['team_b'].map(team_id_to_name)
+
+    st.write("### Points Scored Evolution")
+    fig = px.line(results_df, 
+                  x=results_df.index, 
+                  y=['points_a', 'points_b'],
+                  labels={'points_a': 'Points (Local Team)', 'points_b': 'Points (Opponent)'},
+                  title="Game-by-Game Points Evolution",
+                  markers=True)
+    st.plotly_chart(fig)
