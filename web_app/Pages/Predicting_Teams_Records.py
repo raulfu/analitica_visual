@@ -23,6 +23,7 @@ def Predicting_Teams_Records_main():
     # Print results
     st.write(f"### Simulated Season Record for {team_to_simulate}: {season_results['wins']} Wins, {season_results['losses']} Losses")
     st.write("Predicted Results of the 2024-2025 Season:\n")
+    st.write("See line chart of games below")
     st.write("\n")
 
 
@@ -52,11 +53,42 @@ def Predicting_Teams_Records_main():
     results_df['team_a_name'] = results_df['team_a'].map(team_id_to_name)
     results_df['team_b_name'] = results_df['team_b'].map(team_id_to_name)
 
-    st.write("### Points Scored Evolution")
-    fig = px.line(results_df, 
-                  x=results_df.index, 
-                  y=['points_a', 'points_b'],
-                  labels={'points_a': 'Points (Local Team)', 'points_b': 'Points (Opponent)'},
-                  title="Game-by-Game Points Evolution",
-                  markers=True)
+    st.write(f"### Points Scored Evolution (White Points Indicate {team_to_simulate})")
+    st.write(f"The season was simulated doing 'ida y vuelta' between each team. Therefore, if index is even, the local team (team_a) is {team_to_simulate}. If index even, {team_to_simulate} is the away team (team_b)")
+    
+
+
+        # Add a column for white dot points
+    results_df['white_dot_points'] = results_df.apply(
+        lambda row: row['points_a'] if row.name % 2 == 0 else row['points_b'], axis=1
+    )
+
+    # Create a scatter trace for white dots
+    scatter_white_dots = px.scatter(
+        results_df,
+        x=results_df.index,
+        y='white_dot_points',
+        labels={'white_dot_points': 'White Dot Points'},
+        color_discrete_sequence=['white'],  # White color for dots
+        title="Game-by-Game Points Evolution with Highlights"
+    )
+
+    # Create a line plot for points scored evolution
+    fig = px.line(
+        results_df,
+        x=results_df.index,
+        y=['points_a', 'points_b'],
+        labels={'points_a': 'Points (Local Team)', 'points_b': 'Points (Opponent)'},
+        title="Game-by-Game Points Evolution",
+        markers=True
+    )
+
+    # Combine the line chart and scatter plot
+    fig.add_trace(scatter_white_dots.data[0])  # Add the white dots trace to the line chart
+
+    # Update layout for visibility
+    fig.update_traces(marker=dict(size=10, line=dict(width=2, color='black')),  # Add black border to white dots
+                    selector=dict(mode='markers'))
+
+    # Show the updated plot
     st.plotly_chart(fig)
