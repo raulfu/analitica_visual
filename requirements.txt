@@ -5,4 +5,4 @@ matplotlib
 pandas
 altair
 plotly
-scikit-learn==1.1
+scikit-learn==1.0.2
