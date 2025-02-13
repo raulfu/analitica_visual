@@ -6,9 +6,7 @@ Project to visualize and predict how the Euroleague basketball league behaves. I
 
 ### 0. Prerequisites
 
-Recommended to have the version of python 3.9.12 or 3.10. Upper versions may not work properly. 
-
-If the repository is cloned locally, "../" needs to be added before each path on files web_app/utils/helpers.py and web_app/utils/helpers_models.py (e.g. if executed locally, add "../" to the start of each of the paths to read the CSVs -> '../datasets/euroleague_players.csv' instead of 'datasets/euroleague_players.csv' ). This format for the path encountered error when the app was being deployed.
+Recommended to have the version of **python 3.9.12**. Upper versions may not work properly. 
 
 ### 1. Clone the repository
 Clone our repository to your local machine using the following command:
@@ -16,7 +14,7 @@ Clone our repository to your local machine using the following command:
 git clone https://github.com/raulfu/analitica_visual.git
 ```
 
-### 2. Install Streamlit and SHAP libraries, also make sure version of scikit-learn is 1.0.2.
+### 2. Install the libraries from requirements.txt, for Streamlit and SHAP libraries, also make sure version of scikit-learn is 1.0.2. 
 
 ### 3. Run the application
 To run the application, execute the following commands when the path is in web_app folder:
