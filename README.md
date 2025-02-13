@@ -6,11 +6,9 @@ Project to visualize and predict how the Euroleague basketball league behaves. I
 
 ### 0. Prerequisites
 
-Recommended to have the version of python 3.12.6. Upper versions may not work properly. If you are using Windows as operative system, you may download the [Windows Installer (64-bit)](https://www.python.org/ftp/python/3.12.6/python-3.12.6-amd64.exe) executable, if you are using MacOS, you may download the [macOS 64-bit universal2 installer](https://www.python.org/ftp/python/3.12.6/python-3.12.6-macos11.pkg) version. For other operative systems or specific versions, checkout the [release page](https://www.python.org/downloads/release/python-3126/) of the python version.
+Recommended to have the version of python 3.9.12 or 3.10. Upper versions may not work properly. 
 
-
-**Important**: Make sure to check the box **"Add Python 3.12 to PATH"** during the installation process.
-
+If the repository is cloned locally, "../" needs to be added before each path on files web_app/utils/helpers.py and web_app/utils/helpers_models.py (e.g. if executed locally, add "../" to the start of each of the paths to read the CSVs -> '../datasets/euroleague_players.csv' instead of 'datasets/euroleague_players.csv' ). This format for the path encountered error when the app was being deployed.
 
 ### 1. Clone the repository
 Clone our repository to your local machine using the following command:
