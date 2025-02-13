@@ -7,21 +7,21 @@ from sklearn.model_selection import train_test_split
 #@st.cache_data
 # Load the models
 
-# if executed locally, add "../" to the start of each of the paths to read the models -> '../logistic_model.pkl'
 
-with open('logistic_model.pkl', 'rb') as f:
+
+with open('../logistic_model.pkl', 'rb') as f:
     logistic_model = pickle.load(f)
 
-with open('rf_model.pkl', 'rb') as f:
+with open('../rf_model.pkl', 'rb') as f:
     rf_model = pickle.load(f)
 
-with open('linear_regressor_points.pkl', 'rb') as f:
+with open('../linear_regressor_points.pkl', 'rb') as f:
     linear_regressor = pickle.load(f)
 
-with open('gradient_boosting_points.pkl', 'rb') as f:
+with open('../gradient_boosting_points.pkl', 'rb') as f:
     gb_regressor = pickle.load(f)
 
-with open('svr_regressor_points.pkl', 'rb') as f:
+with open('../svr_regressor_points.pkl', 'rb') as f:
     svr_regressor = pickle.load(f)
 
 
