@@ -1,16 +1,17 @@
 import streamlit as st
 
 from Pages.Explaining_Predictive_Models import Explaining_Predictions_main
-from Pages.Games_Analysis import Games_Analysis_main
+from Pages.games_analysis import Games_Analysis_main
 from Pages.Players_Season_Analysis import Players_Season_Analysis_main
-from Pages.Players_Tops import Players_Tops_main
+from Pages.players_tops import Players_Tops_main
 from Pages.Predicting_Outcome_Of_A_Game import Predicting_Outcome_Of_A_Game_main
 from Pages.Predicting_Teams_Records import Predicting_Teams_Records_main
 from Pages.Teams_Season_Analysis import Teams_Season_Analysis_main
-from Pages.Teams_Tops import Teams_Tops_main
+from Pages.teams_tops import Teams_Tops_main
 
 
-#cd Desktop\analitica_visual\final_project\analitica_visual\web_app
+
+#cd Desktop\uni\analitica_visual-1\web_app
 #streamlit run app.py
 
 
