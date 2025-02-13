@@ -3,15 +3,15 @@ import matplotlib.pyplot as plt
 
 #@st.cache_data
 # datasets
-# if executed locally, add "../" to the start of each of the paths to read the CSVs -> '../datasets/euroleague_players.csv'
 
-df_players = pd.read_csv('datasets/euroleague_players.csv')
-df_box_score = pd.read_csv('datasets/euroleague_box_score.csv')
-df_teams = pd.read_csv('datasets/euroleague_teams.csv')
-df_points = pd.read_csv('datasets/euroleague_points.csv')
-df_header = pd.read_csv('datasets/euroleague_header.csv')
 
-df_box_score_eurocup = pd.read_csv('datasets/eurocup_box_score.csv')
+df_players = pd.read_csv('../datasets/euroleague_players.csv')
+df_box_score = pd.read_csv('../datasets/euroleague_box_score.csv')
+df_teams = pd.read_csv('../datasets/euroleague_teams.csv')
+df_points = pd.read_csv('../datasets/euroleague_points.csv')
+df_header = pd.read_csv('../datasets/euroleague_header.csv')
+
+df_box_score_eurocup = pd.read_csv('../datasets/eurocup_box_score.csv')
 
 
 
