@@ -1,7 +1,7 @@
 streamlit
 numpy
-mport shap
-matplotlib.pyplot
+shap
+matplotlib
 pandas
 altair
-plotly.express
+plotly
