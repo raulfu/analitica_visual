@@ -11,7 +11,7 @@ from Pages.teams_tops import Teams_Tops_main
 
 
 
-#cd Desktop\uni\analitica_visual-1\web_app
+#cd Desktop\tfg\analitica_visual\web_app
 #streamlit run app.py
 
 
