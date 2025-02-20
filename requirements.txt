@@ -6,3 +6,4 @@ pandas
 altair
 plotly
 scikit-learn==1.4
+ipython
