@@ -7,21 +7,21 @@ from sklearn.model_selection import train_test_split
 #@st.cache_data
 # Load the models
 
+#if executing locally, must add "../" to eh path. e.g. '../datasets/euroleague_players.csv'. This is due to a deployment problem with streamlit
 
-
-with open('../logistic_model.pkl', 'rb') as f:
+with open('logistic_model.pkl', 'rb') as f:
     logistic_model = pickle.load(f)
 
-with open('../rf_model.pkl', 'rb') as f:
+with open('rf_model.pkl', 'rb') as f:
     rf_model = pickle.load(f)
 
-with open('../linear_regressor_points.pkl', 'rb') as f:
+with open('linear_regressor_points.pkl', 'rb') as f:
     linear_regressor = pickle.load(f)
 
-with open('../gradient_boosting_points.pkl', 'rb') as f:
+with open('gradient_boosting_points.pkl', 'rb') as f:
     gb_regressor = pickle.load(f)
 
-with open('../svr_regressor_points.pkl', 'rb') as f:
+with open('svr_regressor_points.pkl', 'rb') as f:
     svr_regressor = pickle.load(f)
 
 
