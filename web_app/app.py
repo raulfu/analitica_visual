@@ -31,7 +31,7 @@ def main():
             "- Predictions: various prediction models are given to either predict the outcome of a game of this current season, or the points each team will score."
             "Using our linear regressor model we also predict the given team record of this season. One can also understand how models work in the explainability part.")
 
-
+    st.write("Recommended to have 67% size for a good visualization of the app")
 
 def setup_pages():
 
